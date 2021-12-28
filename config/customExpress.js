@@ -9,7 +9,7 @@ module.exports = () => {
 
   consign()
     .include('controllers')
-      .into(app);
+    .into(app);
 
   return app;
 };
