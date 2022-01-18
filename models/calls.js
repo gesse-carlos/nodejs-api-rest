@@ -1,5 +1,7 @@
 const moment = require('moment');
 const connection = require('../utils/connection');
+const axios = require('axios');
+const repository = require('../repositories/call')
 
 class Call {
   create(call, res) {
@@ -31,10 +33,9 @@ class Call {
 
       connection.query(sql, callDate, (error, result) => {
         if (error) {
-          res.status(400).json(error);
-        } else {
-          res.status(201).json(call);
+          return res.status(400).json(error);
         }
+        res.status(201).json(call);
       });
     } catch (error) {
       console.log(error);
@@ -43,15 +44,7 @@ class Call {
   };
 
   read(res) {
-    const sql = 'SELECT * FROM Calls';
-
-    connection.query(sql, (error, results) => {
-      if (error) {
-        res.status(400).json(error);
-      } else {
-        res.status(200).json(results);
-      }
-    })
+    return repository.read();
   };
 
   queryById(id, res) {
@@ -60,10 +53,9 @@ class Call {
     connection.query(sql, (error, results) => {
       const result = results[0];
       if (error) {
-        res.status(400).json(error);
-      } else {
-        res.status(200).json(result);
+        return res.status(400).json(error);
       }
+      res.status(200).json(result);
     });
   };
 
@@ -77,9 +69,8 @@ class Call {
     connection.query(sql, [values, id], (error, result) => {
       if (error) {
         res.status(400).json(error);
-      } else {
-        res.status(200).json({...values, id});
       }
+      res.status(200).json({...values, id});
     });
   };
 
@@ -88,10 +79,9 @@ class Call {
 
     connection.query(sql, id, (error, result) => {
       if (error) {
-        res.status(400).json(error);
-      } else {
-        res.status(200).json({ id });
+        return res.status(400).json(error);
       }
+      res.status(200).json({ id });
     });
   };
 }
